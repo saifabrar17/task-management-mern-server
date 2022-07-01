@@ -45,7 +45,7 @@ async function run() {
             const id = await ObjectId(req.headers.id);
             const doc = {
                 $set: {
-                    taskStatus: 1
+                    taskStatus: "1"
                 }
             }
             const result = await dataCollection.updateOne({ _id: id }, doc, { upsert: true });
