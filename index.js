@@ -32,6 +32,14 @@ async function run() {
             res.send(tasks);
         })
 
+        app.get('/completedTasks', async (req, res) => {
+            const status = req.params.taskStatus;
+            const filter = { taskStatus : "1" };
+            const result = await dataCollection.find(filter);
+            res.send(result);
+          })
+
+
         //GET by Status
         app.put('/complete', async (req, res) => {
             const id = await ObjectId(req.headers.id);
