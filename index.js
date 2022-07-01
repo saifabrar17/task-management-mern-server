@@ -34,22 +34,21 @@ async function run() {
 
         app.get('/completedTasks', async (req, res) => {
             const status = req.params.taskStatus;
-            const filter = { taskStatus : "1" };
-            const result = await dataCollection.find(filter);
+            const filter = { "taskStatus": "1" };
+            const result = await dataCollection.find(filter).toArray();
             res.send(result);
           })
 
 
-        //GET by Status
+        //UPDATE
         app.put('/complete', async (req, res) => {
             const id = await ObjectId(req.headers.id);
             const doc = {
                 $set: {
-                    taskStatus: '1'
+                    taskStatus: 1
                 }
             }
             const result = await dataCollection.updateOne({ _id: id }, doc, { upsert: true });
-            // console.log(result)
             res.send(result);
         })
     }
