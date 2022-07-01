@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.port || 5000;
 
@@ -15,7 +15,7 @@ async function run() {
     try {
         await client.connect();
         const dataCollection = client.db("task-manager").collection("tasks")
-       
+
 
         //POST
         app.post('/allTasks', async (req, res) => {
@@ -30,6 +30,19 @@ async function run() {
             const cursor = dataCollection.find(query);
             const tasks = await cursor.toArray();
             res.send(tasks);
+        })
+
+        //GET by Status
+        app.put('/complete', async (req, res) => {
+            const id = await ObjectId(req.headers.id);
+            const doc = {
+                $set: {
+                    taskStatus: '1'
+                }
+            }
+            const result = await dataCollection.updateOne({ _id: id }, doc, { upsert: true });
+            // console.log(result)
+            res.send(result);
         })
     }
     finally {
